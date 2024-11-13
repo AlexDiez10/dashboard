@@ -10,13 +10,13 @@ import Indicator from './components/indicator'
 function App() {
 
   return (
-       <Grid container spacing={5}>
+      <Grid container spacing={5}>
 
         {/* Indicadores */}
-        <Grid size={{xs:12 , xl:3}}><Indicator /></Grid>
-        <Grid size={{xs:12 , xl:3}}><Indicator /></Grid>
-        <Grid size={{xs:12 , xl:3}}><Indicator /></Grid>
-        <Grid size={{xs:12 , xl:3}}><Indicator /></Grid>
+        <Grid size={{xs:12 , xl:3}}><Indicator title={'Indicador 1'} subtitle={'Unidad 1'} value={1.23} /></Grid>
+        <Grid size={{xs:12 , xl:3}}><Indicator title={'Indicador 2'} subtitle={'Unidad 2'} value={1.23} /></Grid>
+        <Grid size={{xs:12 , xl:3}}><Indicator title={'Indicador 3'} subtitle={'Unidad 3'} value={1.23} /></Grid>
+        <Grid size={{xs:12 , xl:3}}><Indicator title={'Indicador 4'} subtitle={'Unidad 4'} value={1.23} /></Grid>
 
         {/* Tabla */} 
         <Grid size={{xs:12 , xl:8}}>Elemento: Tabla</Grid>

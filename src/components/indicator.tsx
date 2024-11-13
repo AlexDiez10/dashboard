@@ -1,7 +1,15 @@
-export default function Indicator(){
+interface Config {
+    title?:String;
+    subtitle?:String;
+    value:Number;
+}
+
+export default function Indicator(config:Config){
     return (
         <>
-            Componente Indicator
+            {config.title}<br />
+            {config.value.toString()}<br />
+            {config.subtitle}
         </>
     )
 }
