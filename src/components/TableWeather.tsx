@@ -24,6 +24,7 @@ export default function TableWeather(props: MyProp) {
 
   // Manejar cambio de página
   const handleChangePage = (event: unknown, newPage: number) => {
+    console.log(event)
     setPage(newPage);
   };
 

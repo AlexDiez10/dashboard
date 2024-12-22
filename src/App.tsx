@@ -26,7 +26,6 @@ function App() {
   let [items, setItems] = useState<Item[]>([])
   let [item, setItem] = useState<Item>()
   let [lineprops, setLineProps] = useState<lineProps>()
-  let [date, setdate] = useState<String[]>()
 
   {/* Hook: useEffect */ }
   useEffect(() => {
