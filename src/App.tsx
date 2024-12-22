@@ -6,8 +6,9 @@ import './App.css'
 import IndicatorWeather from './components/indicatorWeather';
 import TableWeather from './components/TableWeather';
 import ControlWeather from './components/ControlWeather';
-import LineChartWeather from './components/LineChartWeather';
 import Item from './interface/Item';
+import lineProps from './interface/Lineprops';
+import { Paper, Typography } from '@mui/material';
 
 import { useEffect, useState } from 'react';
 interface Indicator {
@@ -23,10 +24,13 @@ function App() {
   let [indicators, setIndicators] = useState<Indicator[]>([])
   let [owm, setOWM] = useState(localStorage.getItem("openWeatherMap"))
   let [items, setItems] = useState<Item[]>([])
+  let [item, setItem] = useState<Item>()
+  let [lineprops, setLineProps] = useState<lineProps>()
+  let [date, setdate] = useState<String[]>()
 
   {/* Hook: useEffect */ }
   useEffect(() => {
-    
+
     let request = async () => {
 
       {/* Referencia a las claves del LocalStorage: openWeatherMap y expiringTime */ }
@@ -62,8 +66,8 @@ function App() {
         setOWM(savedTextXML)
       }
 
-      {/* Valide el procesamiento con el valor de savedTextXML */}
-      if( savedTextXML ) {
+      {/* Valide el procesamiento con el valor de savedTextXML */ }
+      if (savedTextXML) {
 
         {/* XML Parser */ }
         const parser = new DOMParser();
@@ -80,21 +84,64 @@ function App() {
 
         let name = xml.getElementsByTagName("name")[0].innerHTML || ""
         let times = xml.getElementsByTagName("time")
+        let lineHumidity: number[] = new Array<number>;
+        let lineCluods: number[] = new Array<number>;
+        let linePrecipitation: number[] = new Array<number>;
+        let dates: String[] = new Array<String>;
         let items: Item[] = new Array<Item>();
-        for (let i = 0; i <times.length; i++){
+        for (let i = 0; i < times.length; i++) {
           let precipitation = times[i].getElementsByTagName("precipitation")[0]
           let humidity = times[i].getElementsByTagName("humidity")[0]
           let clouds = times[i].getElementsByTagName("clouds")[0]
+          let temperature = times[i].getElementsByTagName("temperature")[0]
+          let pressure = times[i].getElementsByTagName("pressure")[0]
           items.push({
             "dateStart": times[i].getAttribute("from") || "",
             "dateEnd": times[i].getAttribute("to") || "",
-            "precipitation": precipitation.getAttribute("probability") || "",
-            "humidity": humidity.getAttribute("value") || "" + humidity.getAttribute("unit") || "",
-            "clouds": clouds.getAttribute("value") || ""
+            "precipitation": Number(precipitation.getAttribute("probability")) || 0,
+            "humidity": Number(humidity.getAttribute("value")) || 0,
+            "clouds": clouds.getAttribute("value") || "",
+            "temperature": Number(temperature.getAttribute("value")) || 0,
+            "pressure": Number(pressure.getAttribute("value")) || 0
           })
+          lineHumidity.push(Number(humidity.getAttribute("value")) || 0)
+          lineCluods.push(Number(clouds.getAttribute("all")) || 0)
+          linePrecipitation.push(Number(precipitation.getAttribute("probability")) || 0)
+          dates.push(times[i].getAttribute("from") || "")
         }
+
         setItems(items)
         dataToIndicators.push({ "title": "Location", "subtitle": "City", "value": name })
+        setLineProps({ "humidity": lineHumidity, "precipitation": linePrecipitation, "clouds": lineCluods, "dates": dates })
+
+        let promPrecipitation = 0;
+        let promHumidity = 0;
+        let promTemperature = 0;
+        let promPressure = 0;
+
+        for (let i = 0; i < items.length; i++) {
+          promPrecipitation += items[i].precipitation;
+          promHumidity += items[i].humidity;
+          promTemperature += items[i].temperature;
+          promPressure += items[i].pressure;
+        }
+
+        promHumidity = promHumidity / items.length;
+        promPrecipitation = promPrecipitation / items.length;
+        promTemperature = promTemperature / items.length;
+        promPressure = promPressure / items.length
+
+        let item: Item = {
+          "dateStart": "",
+          "dateEnd": "",
+          "precipitation": promPrecipitation,
+          "humidity": promHumidity,
+          "clouds": "",
+          "temperature": promTemperature,
+          "pressure": promPressure
+        }
+
+        setItem(item)
 
         let location = xml.getElementsByTagName("location")[1]
 
@@ -137,41 +184,56 @@ function App() {
   }
 
   return (
-    <Grid container spacing={5}>
+    <Grid container spacing={5} sx={{display:'flex', alignItems: 'center'}}>
 
-      {/* Indicadores */}
-      {/* <Grid size={{ xs: 12, xl: 3 }}>
-        <IndicatorWeather title={'Indicator 1'} subtitle={'Unidad 1'} value={"1.23"} />
+      <Grid size={{ xs: 12, xl: 12 }}>
+      <Typography component="h2" variant="h3" color="primary" gutterBottom >Ecuashboard</Typography>
       </Grid>
-      <Grid size={{ xs: 12, xl: 3 }}>
-        <IndicatorWeather title={'Indicator 2'} subtitle={'Unidad 2'} value={"3.12"} />
+
+      {/* Parametros basicos */}
+      <Paper sx={{display:'flex', width:"100%", gap:"20px", flexWrap:'wrap', alignItems:'center', p:3}}>
+      <Grid size={{ xs: 12, xl: 12 }}>
+      <Typography component="h2" variant="h4" color="primary" gutterBottom >Ubicación</Typography>
       </Grid>
-      <Grid size={{ xs: 12, xl: 3 }}>
-        <IndicatorWeather title={'Indicator 3'} subtitle={'Unidad 3'} value={"2.31"} />
-      </Grid>
-      <Grid size={{ xs: 12, xl: 3 }}>
-        <IndicatorWeather title={'Indicator 4'} subtitle={'Unidad 4'} value={"3.21"} />
-      </Grid> */}
       {renderIndicators()}
+      </Paper>
+
+      {/* Grafica */}
+      <Paper sx={{display:'flex', width:"96%", gap:"20px", flexWrap:'wrap', alignItems:'center', p:3}}>
+      <Grid size={{ xs: 12, xl: 12 }}>
+      <Typography component="h2" variant="h4" color="primary" gutterBottom >Graficas</Typography>
+      </Grid>
+      <Grid>
+        <ControlWeather humidity={lineprops?.humidity || []} precipitation={lineprops?.precipitation || []} clouds={lineprops?.clouds || []} dates={lineprops?.dates || []} />
+      </Grid>
+      </Paper>
 
       {/* Tabla */}
-      <Grid size={{ xs: 12, xl: 8 }}>
-        {/* Grid Anidado */}
-        <Grid container spacing={2}>
-          <Grid size={{ xs: 12, xl: 3 }}>
-            <ControlWeather />
-          </Grid>
-          <Grid size={{ xs: 12, xl: 9 }}>
-          <TableWeather itemsIn={ items } />
-          </Grid>
+      <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Grid size={{ xs: 12, xl: 12 }}>
+      <Typography component="h2" variant="h4" color="primary" gutterBottom >Tabla</Typography>
+      </Grid>
+        <TableWeather itemsIn={items} />
+      </Paper>
+
+      {/* promedios */}
+      <Paper sx={{display:'flex', width:"100%", gap:"20px", flexWrap:'wrap', alignItems:'center', p:3}}>
+      <Grid size={{ xs: 12, xl: 12 }}>
+      <Typography component="h2" variant="h4" color="primary" gutterBottom >Promedios</Typography>
+      </Grid>
+        <Grid size={{ xs: 12, xl: 3 }}>
+          <IndicatorWeather title={"Humidity"} subtitle={'%'} value={String(item?.humidity.toFixed(2))} />
         </Grid>
-      </Grid>
-
-
-      {/* Gráfico */}
-      <Grid size={{ xs: 12, xl: 4 }}>
-        <LineChartWeather />
-      </Grid>
+        <Grid size={{ xs: 12, xl: 3 }}>
+          <IndicatorWeather title={'Temperature'} subtitle={'kelvin'} value={String(item?.temperature.toFixed(2))} />
+        </Grid>
+        <Grid size={{ xs: 12, xl: 3 }}>
+          <IndicatorWeather title={'Pressure'} subtitle={'hPa'} value={String(item?.pressure.toFixed(2))} />
+        </Grid>
+        <Grid size={{ xs: 12, xl: 3 }}>
+          <IndicatorWeather title={'Precipitation'} subtitle={'%'} value={String(item?.precipitation.toFixed(2))} />
+        </Grid>
+        </Paper>
 
     </Grid>
   )
