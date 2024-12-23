@@ -11,6 +11,7 @@ import lineProps from './interface/Lineprops';
 import { Paper, Typography } from '@mui/material';
 
 import { useEffect, useState } from 'react';
+import { lightBlue } from '@mui/material/colors';
 interface Indicator {
   title?: String;
   subtitle?: String;
@@ -171,7 +172,7 @@ function App() {
     return indicators
       .map(
         (indicator, idx) => (
-          <Grid key={idx} size={{ xs: 12, xl: 3 }}>
+          <Grid key={idx} size={{ xs: 12, xl: 3 }} sx={{borderRadius:"5px"}}>
             <IndicatorWeather
               title={indicator["title"]}
               subtitle={indicator["subtitle"]}
@@ -183,16 +184,16 @@ function App() {
   }
 
   return (
-    <Grid container spacing={5} sx={{display:'flex', alignItems: 'center'}}>
+    <Grid container spacing={5} sx={{display:'flex', alignItems: 'center', m:0, backgroundColor:'#95ebf1'}}>
 
-      <Grid size={{ xs: 12, xl: 12 }}>
-      <Typography component="h2" variant="h3" color="primary" gutterBottom >Ecuashboard</Typography>
+      <Grid size={{ xs: 12, xl: 12 }} sx={{alignSelf:'flex-start'}}>
+      <Typography component="h2" variant="h3" sx={{color: "#fcaaa2", fontWeight:"bold"}} gutterBottom >Ecuashboard</Typography>
       </Grid>
 
       {/* Parametros basicos */}
-      <Paper sx={{display:'flex', width:"100%", gap:"20px", flexWrap:'wrap', alignItems:'center', p:3}}>
+      <Paper sx={{display:'flex', width:"100%", gap:"20px", justifyContent:"space-between", flexWrap:'wrap', alignItems: 'center', p:3, borderRadius:"5px"}}>
       <Grid size={{ xs: 12, xl: 12 }}>
-      <Typography component="h2" variant="h4" color="primary" gutterBottom >Ubicación</Typography>
+      <Typography component="h2" variant="h4" sx={{color:"#1edfd7", fontWeight:"bold"}} gutterBottom >Datos Geográficos</Typography>
       </Grid>
       {renderIndicators()}
       </Paper>
@@ -200,7 +201,7 @@ function App() {
       {/* Grafica */}
       <Paper sx={{display:'flex', width:"96%", gap:"20px", flexWrap:'wrap', alignItems:'center', p:3}}>
       <Grid size={{ xs: 12, xl: 12 }}>
-      <Typography component="h2" variant="h4" color="primary" gutterBottom >Graficas</Typography>
+      <Typography component="h2" variant="h4" sx={{color:"#1edfd7", fontWeight:"bold"}} gutterBottom >Condiciones Atmosféricas</Typography>
       </Grid>
       <Grid>
         <ControlWeather humidity={lineprops?.humidity || []} precipitation={lineprops?.precipitation || []} clouds={lineprops?.clouds || []} dates={lineprops?.dates || []} />
@@ -208,17 +209,17 @@ function App() {
       </Paper>
 
       {/* Tabla */}
-      <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Paper sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', p:3 }}>
       <Grid size={{ xs: 12, xl: 12 }}>
-      <Typography component="h2" variant="h4" color="primary" gutterBottom >Tabla</Typography>
+      <Typography component="h2" variant="h4" sx={{color:"#1edfd7", fontWeight:"bold"}} gutterBottom >Registro Climático</Typography>
       </Grid>
         <TableWeather itemsIn={items} />
       </Paper>
 
       {/* promedios */}
-      <Paper sx={{display:'flex', width:"100%", gap:"20px", flexWrap:'wrap', alignItems:'center', p:3}}>
+      <Paper sx={{display:'flex', width:"100%", gap:"20px", justifyContent:"space-between", flexWrap:'wrap', alignItems: 'center', p:3, borderRadius:"5px"}}>
       <Grid size={{ xs: 12, xl: 12 }}>
-      <Typography component="h2" variant="h4" color="primary" gutterBottom >Promedios</Typography>
+      <Typography component="h2" variant="h4" sx={{color:"#1edfd7", fontWeight:"bold"}} gutterBottom >Estadísticas Climáticas</Typography>
       </Grid>
         <Grid size={{ xs: 12, xl: 3 }}>
           <IndicatorWeather title={"Humidity"} subtitle={'%'} value={String(item?.humidity.toFixed(2))} />

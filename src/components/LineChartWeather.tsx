@@ -1,6 +1,7 @@
 import Paper from '@mui/material/Paper';
 import { LineChart } from '@mui/x-charts/LineChart';
 import lineOptions from '../interface/Lineoptions';
+import { Grid } from '@mui/material';
 
 export default function LineChartWeather(line: lineOptions) {
 
@@ -14,11 +15,13 @@ export default function LineChartWeather(line: lineOptions) {
                 p: 4,
                 display: 'flex',
                 flexDirection: 'column',
-                width: "100%"
+                width: "100%",
+                backgroundColor:"#fe8f84"
             }}
         >
 
             {/* Componente para un gráfico de líneas */}
+            <Grid sx={{backgroundColor:'white'}}>
             <LineChart
                 width={800}
                 height={300}
@@ -27,6 +30,7 @@ export default function LineChartWeather(line: lineOptions) {
                 ]}
                 xAxis={[{ scaleType: 'point', data: labels }]}
             />
+            </Grid>
         </Paper>
     );
 }

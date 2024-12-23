@@ -8,6 +8,7 @@ import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import { useEffect, useState } from 'react';
 import Item from '../interface/Item';
+import { Collapse } from '@mui/material';
 
 interface MyProp {
   itemsIn: Item[];
@@ -36,15 +37,15 @@ export default function TableWeather(props: MyProp) {
 
   return (
     <Paper sx={{display: 'flex', alignItems: 'center', flexDirection: 'column', p:4}}>
-      <TableContainer component={Paper}>
-        <Table>
+      <TableContainer  component={Paper}>
+        <Table  style={{ border: "1px solid gray", borderCollapse: "collapse", width: "100%", backgroundColor:"#fe8f84" }}>
           <TableHead>
             <TableRow>
-              <TableCell sx={{ width: '300px' }}>Date Start</TableCell>
-              <TableCell align="right" sx={{ width: '300px' }}>Date End</TableCell>
-              <TableCell align="right" sx={{ width: '300px' }}>Humidity (%)</TableCell>
-              <TableCell align="right" sx={{ width: '300px' }}>Precipitation (%)</TableCell>
-              <TableCell align="right" sx={{ width: '300px' }}>Clouds</TableCell>
+              <TableCell sx={{ width: '300px', color:'white', fontWeight:"bold" }}>Date Start</TableCell>
+              <TableCell align="right" sx={{ width: '300px', color:'white', fontWeight:"bold"  }}>Date End</TableCell>
+              <TableCell align="right" sx={{ width: '300px', color:'white', fontWeight:"bold"  }}>Humidity (%)</TableCell>
+              <TableCell align="right" sx={{ width: '300px', color:'white', fontWeight:"bold"  }}>Precipitation (%)</TableCell>
+              <TableCell align="right" sx={{ width: '300px', color:'white', fontWeight:"bold"  }}>Clouds</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -53,19 +54,20 @@ export default function TableWeather(props: MyProp) {
                 key={idx}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
-                <TableCell component="th" scope="row">
+                <TableCell component="th" scope="row" sx={{color:"white"}}>
                   {row.dateStart}
                 </TableCell>
-                <TableCell align="right">{row.dateEnd}</TableCell>
-                <TableCell align="right">{row.humidity}</TableCell>
-                <TableCell align="right">{row.precipitation}</TableCell>
-                <TableCell align="right">{row.clouds}</TableCell>
+                <TableCell align="right" sx={{color:"white"}}>{row.dateEnd}</TableCell>
+                <TableCell align="right" sx={{color:"white"}}>{row.humidity}</TableCell>
+                <TableCell align="right" sx={{color:"white"}}>{row.precipitation}</TableCell>
+                <TableCell align="right" sx={{color:"white"}}>{row.clouds}</TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
       <TablePagination
+        sx={{color: "#31c3cd"}}
         rowsPerPageOptions={[5, 10, 25]} // Opciones para cambiar filas por página
         component="div"
         count={rows.length} // Número total de filas

@@ -61,14 +61,14 @@ export default function ControlWeather(lineprops: lineProps) {
     };
 
     return (
-        <Grid sx={{ p: 2, display: "flex", justifyContent: "space-between"}}>
-                <Paper sx={{ p: 2, display: "flex", flexDirection: "column", width: '500px', height:'350px'}}>
-                    <Typography mb={2} component="h3" variant="h6" color="primary">
+        <Grid sx={{ p: 2, display: "flex", justifyContent: "space-between", alignItems:"center"}}>
+                <Paper sx={{ p: 2, display: "flex", flexDirection: "column", width: '500px', height:'332px', backgroundColor:"#fe8f84"}}>
+                    <Typography mb={2} component="h3" variant="h6" color="white">
                         Variables Meteorológicas
                     </Typography>
 
-                    <Box sx={{ minWidth: 120 }}>
-                    <InputLabel id="simple-select-label" sx={{alignSelf:"flex-start"}}>Variables</InputLabel>
+                    <Box sx={{ minWidth: 120, backgroundColor:"white", border:"5px" }}>
+                    <InputLabel id="simple-select-label" sx={{alignSelf:"flex-start"}}></InputLabel>
                         <FormControl fullWidth>
                             
                             <Select
@@ -76,12 +76,13 @@ export default function ControlWeather(lineprops: lineProps) {
                                 id="simple-select"
                                 value={selected.toString()} // Controla el valor del select
                                 onChange={handleChange}
+                                sx={{color: "#0ce1f0"}}
                             >
-                                <MenuItem value="-1" disabled>
+                                <MenuItem value="-1" disabled  sx={{color: "#018e98"}} >
                                     Seleccione una variable
                                 </MenuItem>
                                 {items.map((item, index) => (
-                                    <MenuItem key={index} value={index.toString()}>
+                                    <MenuItem key={index} value={index.toString()} sx={{color: "#0ce1f0"}}>
                                         {item.name}
                                     </MenuItem>
                                 ))}
@@ -89,7 +90,7 @@ export default function ControlWeather(lineprops: lineProps) {
                         </FormControl>
                     </Box>
 
-                    <Typography ref={descriptionRef} mt={2} component="p" color="text.secondary" />
+                    <Typography sx={{color:"white"}} ref={descriptionRef} mt={2} component="p" color="text.secondary" />
                 </Paper>
                 {/* Gráfico */}
                 <LineChartWeather
