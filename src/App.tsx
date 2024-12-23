@@ -9,9 +9,8 @@ import ControlWeather from './components/ControlWeather';
 import Item from './interface/Item';
 import lineProps from './interface/Lineprops';
 import { Paper, Typography } from '@mui/material';
-
 import { useEffect, useState } from 'react';
-import { lightBlue } from '@mui/material/colors';
+
 interface Indicator {
   title?: String;
   subtitle?: String;

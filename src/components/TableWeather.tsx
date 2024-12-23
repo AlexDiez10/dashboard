@@ -8,7 +8,6 @@ import Paper from '@mui/material/Paper';
 import TablePagination from '@mui/material/TablePagination';
 import { useEffect, useState } from 'react';
 import Item from '../interface/Item';
-import { Collapse } from '@mui/material';
 
 interface MyProp {
   itemsIn: Item[];

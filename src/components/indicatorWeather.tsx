@@ -1,6 +1,5 @@
 import Typography from "@mui/material/Typography";
 import Paper from "@mui/material/Paper";
-import { lightBlue } from "@mui/material/colors";
 
 interface Indicator {
   title?: String;
